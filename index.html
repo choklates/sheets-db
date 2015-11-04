@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sheets DB</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <table id="table" class="table"></table>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sheetrock/1.0.0/dist/sheetrock.min.js"></script>
+  <script>
+    function handleData(error, options, response) {
+      var raw, table, headers, html;
+
+      console.info(response);
+
+      if (!error) {
+        raw = response.raw;
+        table = raw.table;
+        headers = '<thead><tr>';
+        response.attributes.labels.forEach(function(header) {
+          headers += '<th>' + header + '</th>';
+        });
+        headers += '</tr></thead>';
+        html = headers + response.html;
+
+        $('#table').html(html);
+      } else {
+        console.warn('haz error');
+      }
+    }
+
+    $(document).ready(function() {
+      var sheetUrl = 'https://docs.google.com/a/mixamo.com/spreadsheets/d/1uaL9cSSrabNBdR5kW25TKzDdoZUPTvVqHz0L8EsI3-o/edit#gid=1178021648';
+
+      sheetrock({
+        url: sheetUrl,
+        callback: handleData
+      });
+    });
+  </script>
+</body>
+</html>
